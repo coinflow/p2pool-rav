@@ -863,6 +863,43 @@ nets = dict(
         #ANNOUNCE_CHANNEL='#p2pool-alt',
         VERSION_CHECK=lambda v: 50700 <= v < 60000 or 60010 <= v < 60100 or 60400 <= v,
     ),
+	cryptographicanomaly=math.Object(
+        PARENT=networks.nets['cryptographicanomaly'],
+        SHARE_PERIOD=6, # seconds
+        CHAIN_LENGTH=24*60*60//10, # shares
+        REAL_CHAIN_LENGTH=24*60*60//10, # shares
+        TARGET_LOOKBEHIND=200, # shares
+        SPREAD=45, # blocks
+        IDENTIFIER='c0212b3a2a928a16'.decode('hex'),
+        PREFIX='6f6d6c13fcce7824'.decode('hex'),
+        P2P_PORT=23931,
+        MIN_TARGET=0,
+        MAX_TARGET=2**256//2**20 - 1,
+        PERSIST=False,
+        WORKER_PORT=23932,
+        BOOTSTRAP_ADDRS='cryptographicanomaly.p2p.0x0a.nl'.split(' '),
+        ANNOUNCE_CHANNEL='#p2pool-alt',
+        VERSION_CHECK=lambda v: 70003 <= v,
+        VERSION_WARNING=lambda v: 'Upgrade Cryptographicanomaly to >= 0.7.0.3!' if v < 70003 else None,
+    ),
+    cryptographicanomaly_testnet=math.Object(
+        PARENT=networks.nets['cryptographicanomaly_testnet'],
+        SHARE_PERIOD=6, # seconds
+        CHAIN_LENGTH=20*60//3, # shares
+        REAL_CHAIN_LENGTH=20*60//3, # shares
+        TARGET_LOOKBEHIND=200, # shares
+        SPREAD=45, # blocks
+        IDENTIFIER='abce87f1b8411861'.decode('hex'),
+        PREFIX='e141bc2258556787'.decode('hex'),
+        P2P_PORT=7009,
+        MIN_TARGET=2**256//50 - 1,
+        MAX_TARGET=2**256//50 - 1,
+        PERSIST=False,
+        WORKER_PORT=7008,
+        BOOTSTRAP_ADDRS=''.split(' '),
+        #ANNOUNCE_CHANNEL='#p2pool-alt',
+        VERSION_CHECK=lambda v: True,
+    ),
 
 )
 for net_name, net in nets.iteritems():

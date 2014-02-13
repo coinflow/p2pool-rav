@@ -1013,6 +1013,48 @@ nets = dict(
         DUMB_SCRYPT_DIFF=2**16,
         DUST_THRESHOLD=1e8,
     ),
+	cryptographicanomaly=math.Object(
+        P2P_PREFIX='fbc0b6db'.decode('hex'),
+        P2P_PORT=13931,
+        ADDRESS_VERSION=23,
+        RPC_PORT=13932,
+        RPC_CHECK=defer.inlineCallbacks(lambda bitcoind: defer.returnValue(
+            'cryptographicanomalyaddress' in (yield bitcoind.rpc_help()) and
+            not (yield bitcoind.rpc_getinfo())['testnet']
+        )),
+        SUBSIDY_FUNC=lambda height: 0*100000000, # P2Pool would need to be edited to send diff to SUBSIDY_FUNC as 2nd argument
+        POW_FUNC=lambda data: pack.IntType(256).unpack(__import__('ltc_scrypt').getPoWHash(data)),
+        BLOCK_PERIOD=40,
+        SYMBOL='CGA',
+        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Cryptographicanomaly') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Cryptographicanomaly/') if platform.system() == 'Darwin' else os.path.expanduser('~/.cryptographicanomaly'), 'cryptographicanomaly.conf'),
+        BLOCK_EXPLORER_URL_PREFIX='http://cryptexplorer.com/block/',
+        ADDRESS_EXPLORER_URL_PREFIX='http://cryptexplorer.com/address/',
+        TX_EXPLORER_URL_PREFIX='http://cryptexplorer.com/tx/',
+        SANE_TARGET_RANGE=(2**256//1000000000 - 1, 2**256//1000 - 1),
+        DUMB_SCRYPT_DIFF=2**16,
+        DUST_THRESHOLD=0
+    ),
+    cryptographicanomaly_testnet=math.Object(
+        P2P_PREFIX='fcc1b7dc'.decode('hex'),
+        P2P_PORT=6008,
+        ADDRESS_VERSION=125,
+        RPC_PORT=6009,
+        RPC_CHECK=defer.inlineCallbacks(lambda bitcoind: defer.returnValue(
+            'cryptographicanomalyaddress' in (yield bitcoind.rpc_help()) and
+            (yield bitcoind.rpc_getinfo())['testnet']
+        )),
+        SUBSIDY_FUNC=lambda height: 0*100000000,
+        POW_FUNC=lambda data: pack.IntType(256).unpack(__import__('ltc_scrypt').getPoWHash(data)),
+        BLOCK_PERIOD=40,
+        SYMBOL='tCGA',
+        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Cryptographicanomaly') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Cryptographicanomaly/') if platform.system() == 'Darwin' else os.path.expanduser('~/.cryptographicanomaly'), 'cryptographicanomaly.conf'),
+        BLOCK_EXPLORER_URL_PREFIX='http://nonexistent-cryptographicanomaly-testnet-explorer/block/',
+        ADDRESS_EXPLORER_URL_PREFIX='http://nonexistent-cryptographicanomaly-testnet-explorer/address/',
+        TX_EXPLORER_URL_PREFIX='http://nonexistent-cryptographicanomaly-testnet-explorer/tx/',
+        SANE_TARGET_RANGE=(2**256//1000000000 - 1, 2**256 - 1),
+        DUMB_SCRYPT_DIFF=2**16,
+        DUST_THRESHOLD=0
+    ),
 
 )
 for net_name, net in nets.iteritems():
