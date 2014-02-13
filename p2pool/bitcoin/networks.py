@@ -929,6 +929,48 @@ nets = dict(
         DUMB_SCRYPT_DIFF=2**16,
         DUST_THRESHOLD=0.0001,
     ),
+    goatcoin=math.Object(
+        P2P_PREFIX='09560977'.decode('hex'),
+        P2P_PORT=57421,
+        ADDRESS_VERSION=38,
+        RPC_PORT=12646,
+        RPC_CHECK=defer.inlineCallbacks(lambda goatcoind: defer.returnValue(
+            'GOATCoinaddress' in (yield goatcoind.rpc_help()) and
+            not (yield goatcoind.rpc_getinfo())['testnet']
+        )),
+        SUBSIDY_FUNC=lambda height: 6*10000000 >> (height + 1)//5000000,
+        POW_FUNC=data.hash256,
+        BLOCK_PERIOD=180, # s
+        SYMBOL='GOAT',
+        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Goatcoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Goatcoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.goatcoin'), 'goatcoin.conf'),
+        BLOCK_EXPLORER_URL_PREFIX='http://69.90.132.127/explorer/block_crawler.php?block_hash=',
+        ADDRESS_EXPLORER_URL_PREFIX='http://dev/null/address/',
+        TX_EXPLORER_URL_PREFIX='http://69.90.132.127/explorer/block_crawler.php?transaction=',
+        SANE_TARGET_RANGE=(2**256//2**32//1000 - 1, 2**256//2**32 - 1),
+        DUMB_SCRYPT_DIFF=1,
+        DUST_THRESHOLD=0.001e8,
+    ),
+    goatcoin_testnet=math.Object(
+        P2P_PREFIX='01fefe05'.decode('hex'),
+        P2P_PORT=18333,
+        ADDRESS_VERSION=130,
+        RPC_PORT=18332,
+        RPC_CHECK=defer.inlineCallbacks(lambda goatcoind: defer.returnValue(
+            'GOATCoinaddress' in (yield goatcoind.rpc_help()) and
+            (yield goatcoind.rpc_getinfo())['testnet']
+        )),
+        SUBSIDY_FUNC=lambda height: 6*10000000 >> (height + 1)//5000000,
+        POW_FUNC=data.hash256,
+        BLOCK_PERIOD=180, # s
+        SYMBOL='tGOAT',
+        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Goatcoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Goatcoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.goatcoin'), 'goatcoin.conf'),
+        BLOCK_EXPLORER_URL_PREFIX='http://dev/null/testnet/block/',
+        ADDRESS_EXPLORER_URL_PREFIX='http://dev/null/testnet/address/',
+        TX_EXPLORER_URL_PREFIX='http://dev/null/testnet/tx/',
+        SANE_TARGET_RANGE=(2**256//2**32//1000 - 1, 2**256//2**32 - 1),
+        DUMB_SCRYPT_DIFF=1,
+        DUST_THRESHOLD=1e8,
+    ),
 
 )
 for net_name, net in nets.iteritems():

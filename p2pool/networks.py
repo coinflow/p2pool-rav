@@ -789,6 +789,43 @@ nets = dict(
         ANNOUNCE_CHANNEL='#p2pool-alt',
         VERSION_CHECK=lambda v: True,
     ),
+    goatcoin=math.Object(
+        PARENT=networks.nets['goatcoin'],
+        SHARE_PERIOD=30, # seconds
+        CHAIN_LENGTH=24*60*60//10, # shares
+        REAL_CHAIN_LENGTH=24*60*60//10, # shares
+        TARGET_LOOKBEHIND=200, # shares
+        SPREAD=10, # blocks
+        IDENTIFIER='daa5f84bafb06c3e'.decode('hex'),
+        PREFIX='a0b7067066da864f'.decode('hex'),
+        P2P_PORT=24628,
+        MIN_TARGET=0,
+        MAX_TARGET=2**256//2**32 - 1,
+        PERSIST=False,
+        WORKER_PORT=22646,
+        BOOTSTRAP_ADDRS='goatcoin.p2p.0x0a.nl'.split(' '),
+        ANNOUNCE_CHANNEL='#p2pool-alt',
+        VERSION_CHECK=lambda v: 50700 <= v < 60000 or 60010 <= v < 60100 or 60400 <= v,
+        VERSION_WARNING=lambda v: 'Upgrade Bitcoin to >=0.8.5!' if v < 80500 else None,
+    ),
+    goatcoin_testnet=math.Object(
+        PARENT=networks.nets['goatcoin_testnet'],
+        SHARE_PERIOD=30, # seconds
+        CHAIN_LENGTH=60*60//10, # shares
+        REAL_CHAIN_LENGTH=60*60//10, # shares
+        TARGET_LOOKBEHIND=200, # shares
+        SPREAD=10, # blocks
+        IDENTIFIER='6a48e619971bd368'.decode('hex'),
+        PREFIX='66deeb5a6b91e865'.decode('hex'),
+        P2P_PORT=19333,
+        MIN_TARGET=0,
+        MAX_TARGET=2**256//2**32 - 1,
+        PERSIST=False,
+        WORKER_PORT=19332,
+        BOOTSTRAP_ADDRS=''.split(' '),
+        #ANNOUNCE_CHANNEL='#p2pool-alt',
+        VERSION_CHECK=lambda v: 50700 <= v < 60000 or 60010 <= v < 60100 or 60400 <= v,
+    ),
 
 )
 for net_name, net in nets.iteritems():
