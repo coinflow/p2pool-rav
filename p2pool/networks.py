@@ -863,7 +863,7 @@ nets = dict(
         #ANNOUNCE_CHANNEL='#p2pool-alt',
         VERSION_CHECK=lambda v: 50700 <= v < 60000 or 60010 <= v < 60100 or 60400 <= v,
     ),
-	cryptographicanomaly=math.Object(
+    cryptographicanomaly=math.Object(
         PARENT=networks.nets['cryptographicanomaly'],
         SHARE_PERIOD=10, # seconds
         CHAIN_LENGTH=24*60*60//10, # shares
